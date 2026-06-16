@@ -39,4 +39,4 @@ python /path/to/skill/scripts/send_mail.py --to "3425519400@qq.com" --subject "D
 ## Important Notes
 - ALWAYS resolve the absolute path to `scripts/send_mail.py` based on the skill's base directory.
 - If the user asks to send a file they just generated, use the `--attachment` flag.
-- The script automatically reads SMTP credentials from `C:\Users\Gove2\Desktop\CLI\email\config.json`.
+- The script automatically reads SMTP credentials from `.env` (see `.env.example` for required keys).
