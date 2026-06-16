@@ -19,9 +19,9 @@ my-new-skill/
 ├── SKILL.md          # 必需：元数据 + 指令
 ├── .env.example      # 如有密钥/token（入 git）
 ├── .env              # 真实凭据（不入 git）
-├── scripts/          # 可选：Python 脚本
+├── scripts/          # 可选：可执行脚本
 ├── references/       # 可选：参考文档
-└── bundled_addons/   # 可选：第三方资源
+└── evals/            # 可选：评估测试样例
 ```
 
 ## SKILL.md 模板
