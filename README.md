@@ -35,6 +35,7 @@ cp -r MySkill/*/ ~/.claude/skills/
 MySkill/
 ├── send-email-skill/
 │   ├── SKILL.md
+│   ├── .env.example
 │   └── scripts/send_mail.py
 ├── godot-procedural-kit/
 │   ├── SKILL.md
@@ -47,9 +48,13 @@ MySkill/
 │   ├── SKILL.md
 │   ├── scripts/parse_pdf.py
 │   ├── references/
+│   ├── .env.example
 │   └── .env               # MinerU token（不入库）
 ├── CLAUDE.md
 ├── README.md
+├── ENV.md                  # .env 规范
+├── NEW.md                  # 新建 Skill 指南
+├── distribute.bat          # 一键分发脚本
 └── .gitignore
 ```
 

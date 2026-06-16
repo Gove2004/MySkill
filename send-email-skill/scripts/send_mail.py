@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import smtplib
 import argparse
 from pathlib import Path
@@ -41,7 +40,7 @@ auth_code = _env.get("AUTH_CODE", "")
 
 def send_email(to_addrs, subject, body, is_html=False, attachments=None):
     if not sender_email or not auth_code:
-        print("Error: sender_email or auth_code is missing in config.json")
+        print("Error: sender_email or auth_code is missing in .env")
         sys.exit(1)
 
     msg = MIMEMultipart()
