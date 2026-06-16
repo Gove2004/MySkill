@@ -1,0 +1,634 @@
+---
+name: make-tutorial
+description: Create professional-grade Chinese tutorial systems (multi-file HTML courses). Use when the user wants to make tutorials, courses, study materials, or structured learning content. Triggers on "做教程", "写课程", "整理成教程", "make a tutorial". Generates production-ready content with real-world examples, best practices, debugging tips, and exercises — not toy demos.
+---
+
+# Make Tutorial
+
+这个 Skill 用来创建**完整的中文教程体系**，以多文件 HTML 站点形式输出。
+
+目标是帮助用户围绕某个主题产出一套**结构清晰、内容充实、易于理解、可直接在浏览器中打开学习**的教程网站。产物应该像一门真正的课程，而不是提纲扩写或模板化拼装。
+
+---
+
+## 核心定位
+
+这个 Skill 应当生成**专业级教学内容**，而非玩具示例或入门速成。
+
+目标是产出：
+- **深度足够**：不止讲"是什么"，还讲"为什么"和"怎么用"
+- **覆盖完整**：包含核心概念、边界情况、常见陷阱、最佳实践
+- **生产就绪**：示例代码可直接用于实际项目，而非演示玩具
+- **系统化**：有清晰的知识图谱和递进路径，不是零散知识点堆砌
+
+它支持：
+1. **从零新建一套教程**
+2. **根据已有文档整理、重写或扩展成教程**
+
+但核心始终围绕：
+> **专业级教程体系，能让学习者真正掌握主题并应用到实际工作**
+
+---
+
+## 为什么用 HTML 而不是 Markdown
+
+Markdown 在教学内容呈现上有明显局限：
+
+| 能力 | Markdown | HTML |
+|------|----------|------|
+| 代码语法高亮 | 依赖渲染器 | 原生支持（Prism.js） |
+| 代码一键复制 | 不支持 | 支持 |
+| 可折叠章节 | 不支持 | `<details>` |
+| 提示框/Callout | 非标准 | 完全可控 |
+| 标签页切换 | 不支持 | 可实现 |
+| 表格样式 | 极有限 | 完全可控 |
+| 内嵌交互示例 | 不支持 | 可实现 |
+| 视觉层次控制 | 有限 | CSS 完全控制 |
+| 离线可用 | 需渲染器 | 双击即开 |
+
+HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥有远超 markdown 的表现力。
+
+---
+
+## 强制语言规则
+
+**本 Skill 生成的教程面向中文用户，尽可能使用中文。**
+
+---
+
+## 触发后的基本行为
+
+当使用这个 Skill 时：
+
+1. **先理解用户真正想做什么。**
+   - 识别教程主题。
+   - 判断是从零新建，还是基于已有材料整理。
+   - 尽量从当前对话中推断足够信息，而不是机械发问。
+
+2. **不要死板追问。**
+   - 如果信息已经足够，就直接开始设计教程。
+   - 只有当答案会显著影响课程结构、深度、路线或示例时，才提出补充问题。
+
+3. **不要套固定模板。**
+   - 不强制固定章节数。
+   - 不强制固定命名方式。
+   - 不强制所有主题走同一种教学路线。
+
+4. **按主题本身来长结构。**
+   - 不同主题需要不同的章节边界、叙事顺序和重点。
+   - 语言教程、框架教程、数学教程、图形学教程、工程教程不应该长得一样。
+
+5. **默认产出真正可学习的教程，而不是轻量提纲。**
+   - 每章通常都要有足够展开。
+   - 避免只写提纲式内容，除非用户明确要求先出草案。
+
+---
+
+## 何时提问
+
+只有在这些信息缺失且会显著影响结果时才提问：
+
+- **学习者基础**（零基础 / 有相关经验 / 进阶 / 专家级）
+- **学习目的**（入门探索 / 工作应用 / 面试准备 / 项目实战 / 深入研究）
+- **技术栈 / 语言 / 框架 / 版本**
+- **深度要求**：
+  - 快速入门（覆盖基本用法）
+  - 系统掌握（覆盖核心概念 + 常见场景 + 最佳实践）
+  - 深度专精（覆盖原理、源码、性能优化、生产陷阱）
+- **实战要求**：是否需要完整项目、代码审查要点、故障排查指南
+- **是否要求独立成体系**
+- **是否希望参考已有文档**
+- **输出目录与命名偏好**
+- **是否要先出目录再确认**
+
+如果从上下文已经能合理判断，就不要为了"流程完整"而发问。
+
+**默认深度：** 如果用户未明确说明，默认按"系统掌握"级别设计（不是入门速成，也不是源码解析）。
+
+---
+
+## 输出设计原则
+
+### 1. 按主题决定结构
+结构必须从主题本身长出来。
+不要把所有教程都改写成同一种壳。
+
+### 2. 教程默认独立成体系
+除非用户明确要求和已有教程组成课程联动：
+- 不要大量引用旧教程当作默认前置
+- 不要写成"在前面的 OpenGL 教程里我们已经学过……"这类强依赖
+- 可以举跨主题例子，但不要把旧教程变成新教程的必要上下文
+
+### 3. 教程要足够详细，但不能臃肿
+目标是：
+- **深度足够教学**：不止讲 API 用法，还讲设计思想、适用场景、权衡考量
+- **包含实战经验**：常见错误、调试技巧、性能考量、生产环境注意事项
+- **示例贴近真实**：不是 `foo/bar` 玩具代码，而是真实场景的简化版
+- **有层次不堆砌**：概念 → 用法 → 场景 → 陷阱 → 最佳实践，而非信息倾倒
+- **可验证掌握**：每章结尾提供练习题、思考题或实战任务，让学习者检验理解
+
+**避免：**
+- 只列 API 不讲为什么这样设计
+- 示例代码只能跑通但不能改、不能扩展
+- 只讲正常路径，不提边界情况和错误处理
+- "这个很简单，大家自己试试"式的甩手
+
+### 4. 保证递进关系
+章节之间应该有自然推进关系：
+- **基础概念**：核心抽象和设计思想
+- **核心机制**：工作原理和关键特性
+- **实际用法**：常见场景和代码模式
+- **深入理解**：边界情况、性能考量、底层机制
+- **生产实践**：错误处理、调试技巧、最佳实践
+- **进阶主题**：性能优化、架构设计、源码解读（如果需要）
+
+顺序应该让读者觉得"为什么下一章在这里出现"是合理的。
+
+**专业教程的特征：**
+- 不止讲"怎么用"，还讲"什么时候用"和"什么时候不该用"
+- 包含真实项目中的权衡和取舍
+- 提供故障排查和调试思路
+- 引用官方文档、源码或权威资料作为深入学习路径
+
+### 5. 主题专属性必须强
+教程应该让人一看就觉得：
+> 这是由深度使用过该技术的专家编写的课程
+
+而不是：
+> 这是一个通用教程模板，把主题名替换了一下
+
+具体要求：
+- **强调该主题真正核心的概念**（不是泛泛而谈的通用编程概念）
+- **示例要像这个领域会出现的例子**（真实场景的简化，而非玩具代码）
+- **章节划分要符合该主题真实的知识结构**（不是死板的"入门-进阶-高级"三段式）
+- **包含该领域的特有陷阱和最佳实践**（不是任何技术都适用的泛泛建议）
+- **引用该领域的权威资源**（官方文档、经典书籍、关键论文）
+- **提供真实的调试和故障排查经验**（不是"遇到问题就查日志"这种废话）
+
+**检验标准：** 如果把教程中的技术名词全部替换成另一个技术，内容仍然说得通，那就是不合格的通用模板。
+
+---
+
+## 编写流程
+
+### Phase 1：理解需求并决定方案
+- 识别主题、受众、深度要求
+- 如果有现有文档，用 `Glob` + `Read` 分析
+- **主题风格自动判断**：技术类→tech，数学类→math，科学类→science（用户无需关心，自动选择最合适的）
+- 缺关键信息时才提问（默认：系统掌握级别）
+- **章节规模**：
+  - 小型教程（≤8章）：直接一次性生成
+  - 中型教程（9-15章）：询问用户是一次性生成还是分批
+  - 大型教程（>15章）：建议缩小范围或拆分成多个独立教程
+
+### Phase 2：生成教程文件
+1. 先 `Read references/assets.md` 获取 CSS/JS 代码
+2. 创建 `assets/` 目录和资源文件
+3. 创建 `index.html`（在开头说明主题风格选择理由）
+4. 创建各章节 HTML（参考 `Read references/chapter-example.md`）
+
+**如果 references 文件读取失败**：使用简化的内联 CSS（基础排版+代码高亮），优先保证教程可用。
+
+### Phase 3：完成前验证
+用 `Glob` 列出所有 HTML 文件，随机 `Read` 2-3 个章节检查链接和路径。
+
+交付时说明：
+- 使用了哪个主题风格（tech/math/science...）及原因
+- 完成了哪些章节
+- 如何修改：直接 `Edit` 对应的 `.html` 文件
+
+---
+
+## 修改已生成的教程
+
+用户要求修改时：
+1. `Glob` 找到目标章节文件
+2. `Read` 读取内容
+3. `Edit` 修改
+4. 验证链接和引用是否仍然正确
+
+---
+
+## 基于现有文档整理教程
+
+如果用户是要"根据已有文档编写教程"：
+
+1. 先检查已有文件
+2. 找出：
+   - 内容重叠
+   - 顺序不合理
+   - 缺少解释
+   - 缺少衔接
+   - 缺少教学层次
+3. 重新组织成学习导向的结构
+4. 必要时重写内容，而不是仅仅重命名或重新打包
+
+不要只是把资料堆成一个目录。要把它变成真正能学的课程。
+
+---
+
+## 文件结构规范
+
+### 目录布局
+
+```
+教程目录/
+├── index.html          # 目录首页，含完整章节目录和导航
+├── 01-章节标题.html
+├── 02-章节标题.html
+├── 03-章节标题.html
+├── ...
+└── assets/
+    ├── style.css       # 主样式文件
+    ├── theme-*.css     # 主题风格文件（按需加载）
+    ├── script.js       # 交互脚本（代码复制、导航等）
+    └── prism/          # 代码高亮库（CSS + JS）
+        ├── prism.css
+        └── prism.js
+```
+
+### 命名规则
+- 章节文件：`01-章节标题.html`、`02-章节标题.html`
+- 章节标题要具体，能反映该章内容
+- 章节数量根据内容自然决定，不要机械套数
+- 所有资源使用相对路径引用
+
+### index.html 完整示例
+
+**读者视角设计要点：**
+- 清晰的学习路径（基础→进阶→高级标注）
+- 预计学习时间（可选）
+- 前置知识说明
+- 主题风格说明（让读者知道为什么是这个配色）
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 进阶教程</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/theme-tech.css">
+</head>
+<body>
+    <main>
+        <h1>Python 进阶教程</h1>
+        <p class="intro">深入掌握 Python 高级特性，包含生产环境实战经验、性能优化和最佳实践。</p>
+        
+        <div class="callout callout-info">
+            <strong>关于本教程</strong>：
+            <ul>
+                <li><strong>前置知识</strong>：已掌握 Python 基础语法（变量、函数、类）</li>
+                <li><strong>学习深度</strong>：系统掌握，包含生产实践和调试技巧</li>
+                <li><strong>主题风格</strong>：技术蓝（适合编程类教程，代码高亮优化）</li>
+            </ul>
+        </div>
+
+        <h2>课程目录</h2>
+        
+        <div class="chapter-list">
+            <div class="chapter-item">
+                <span class="chapter-badge basic">基础</span>
+                <h3><a href="01-iterators-generators.html">01 - 迭代器与生成器</a></h3>
+                <p>理解迭代协议、生成器表达式、yield 关键字和惰性求值</p>
+            </div>
+            
+            <div class="chapter-item">
+                <span class="chapter-badge basic">基础</span>
+                <h3><a href="02-decorators.html">02 - 装饰器深入</a></h3>
+                <p>函数装饰器、类装饰器、装饰器工厂和常见应用场景</p>
+            </div>
+            
+            <div class="chapter-item">
+                <span class="chapter-badge basic">基础</span>
+                <h3><a href="03-context-managers.html">03 - 上下文管理器</a></h3>
+                <p>with 语句原理、自定义上下文管理器、资源管理最佳实践</p>
+            </div>
+            
+            <div class="chapter-item">
+                <span class="chapter-badge intermediate">进阶</span>
+                <h3><a href="04-exception-handling.html">04 - 异常处理最佳实践</a></h3>
+                <p>异常链、重试策略、调试技巧和生产环境错误处理</p>
+            </div>
+            
+            <div class="chapter-item">
+                <span class="chapter-badge intermediate">进阶</span>
+                <h3><a href="05-concurrency.html">05 - 并发编程</a></h3>
+                <p>多线程、多进程、asyncio、GIL 和性能权衡</p>
+            </div>
+            
+            <div class="chapter-item">
+                <span class="chapter-badge advanced">高级</span>
+                <h3><a href="06-metaclasses.html">06 - 元类与类型系统</a></h3>
+                <p>元类、类型注解、Protocol 和运行时类型检查</p>
+            </div>
+        </div>
+
+        <h2>学习资源</h2>
+        <ul>
+            <li><a href="https://docs.python.org/3/" target="_blank">Python 官方文档</a></li>
+            <li><a href="https://peps.python.org/" target="_blank">Python 增强提案 (PEPs)</a></li>
+        </ul>
+    </main>
+</body>
+</html>
+```
+
+对应的 CSS 添加到 `style.css`：
+```css
+.intro { font-size: 1.1em; color: #555; margin-bottom: 2em; }
+.chapter-list { display: flex; flex-direction: column; gap: 1.5em; }
+.chapter-item { border: 1px solid #ddd; border-radius: 8px; padding: 1.5em; background: #fafafa; }
+.chapter-item h3 { margin: 0.5em 0; }
+.chapter-item a { text-decoration: none; color: #007acc; }
+.chapter-item a:hover { text-decoration: underline; }
+.chapter-badge { display: inline-block; padding: 0.2em 0.8em; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-right: 0.5em; }
+.chapter-badge.basic { background: #e8f5e9; color: #2e7d32; }
+.chapter-badge.intermediate { background: #fff3e0; color: #e65100; }
+.chapter-badge.advanced { background: #fce4ec; color: #c2185b; }
+```
+
+---
+
+## 主题风格系统
+
+根据教程主题领域，自动选择不同的视觉风格（配色、字体、氛围）。
+
+### 主题分类
+
+- **`theme-tech`** — 技术/编程类：深色代码块，蓝色系，技术感
+- **`theme-math`** — 数学/理论类：纸质感，衬线字体，学术氛围
+- **`theme-science`** — 科学/工程类：冷色调，数据友好，实验室感
+- **`theme-art`** — 设计/艺术类：大胆渐变，高对比，现代感
+- **`theme-humanities`** — 人文/语言类：温暖色调，舒适阅读
+- **`theme-business`** — 商业/职场类：专业深蓝，干净利落
+
+### 选择逻辑
+
+根据教程主题自动判断最合适的风格：
+- **纯技术类**（编程、框架、工具）→ `theme-tech`
+- **理论/数学类**（算法理论、数学、统计）→ `theme-math`
+- **应用科学类**（数据分析、物理、工程）→ `theme-science`
+- **设计/视觉类**（UI、图形、动画）→ `theme-art`
+- **人文/语言类**（语言学习、写作）→ `theme-humanities`
+- **商业/管理类**（营销、管理、职场）→ `theme-business`
+
+**跨领域判断：** 如果主题跨领域（如"Python 数据分析"），优先选择实操性更强的主题（此例选 `theme-tech`，因为重点是编程实现而非数据科学理论）。默认使用 `theme-tech`。
+
+完整主题样式代码参考 `references/assets.md`。
+
+---
+
+## HTML 页面模板
+
+每个章节 HTML 文件应遵循以下基本结构：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节标题 - 教程名称</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/theme-tech.css">
+</head>
+<body>
+    <nav class="chapter-nav">
+        <a href="index.html">目录</a>
+        <a href="上一章.html">← 上一章</a>
+        <a href="下一章.html">下一章 →</a>
+    </nav>
+
+    <main>
+        <h1>章节标题</h1>
+        <!-- 正文内容 -->
+    </main>
+
+    <footer class="chapter-footer">
+        <nav class="chapter-nav bottom">
+            <a href="上一章.html">← 上一章标题</a>
+            <a href="下一章.html">下一章标题 →</a>
+        </nav>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="assets/script.js"></script>
+</body>
+</html>
+```
+
+**完整示例**：参考 `references/chapter-example.md` 查看一个专业级章节的完整实现（Python 异常处理）。
+
+**资源文件**：参考 `references/assets.md` 获取完整的 CSS、JS 和主题样式代码。
+
+---
+
+## HTML 组件使用指南
+
+充分利用 HTML 的表现力增强教学效果。完整组件库和示例参考 `references/assets.md`。
+
+**核心组件：**
+- **提示框**：`<div class="callout callout-info/warning/tip/danger">`
+- **代码块**：`<pre><code class="language-python">` + Prism.js 自动高亮
+- **可折叠内容**：`<details><summary>` 用于进阶内容
+- **标签页**：`<div class="tabs">` 展示多语言对比
+- **对比表格**：`<table class="comparison">` 好/坏写法对照
+- **步骤流程**：`<div class="steps">` 操作指南
+- **定义框**：`<div class="definition">` 关键概念
+- **侧边注释**：`<aside class="sidebar-note">` 补充说明
+
+**无障碍要求：**
+- 为交互组件添加 ARIA 属性（`role`, `aria-selected`, `aria-label`）
+- 使用语义化标签（`<nav>`, `<main>`, `<article>`）
+- 确保键盘导航可访问所有交互元素
+- 文本与背景对比度 ≥ 4.5:1
+
+---
+
+5. **替代文本**：图片、图表必须有 `alt` 描述
+
+**示例改进：**
+```html
+<!-- 标签页组件添加 ARIA -->
+<div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="panel-1">Python</button>
+    <button role="tab" aria-selected="false" aria-controls="panel-2">JavaScript</button>
+</div>
+<div id="panel-1" role="tabpanel" class="tab-content active">...</div>
+<div id="panel-2" role="tabpanel" class="tab-content">...</div>
+
+<!-- 代码块复制按钮添加 aria-label -->
+<button class="copy-button" aria-label="复制代码到剪贴板">复制</button>
+```
+
+### 响应式设计已包含
+
+`style.css` 已包含基本响应式设计（`@media (max-width: 768px)`），移动端会自动调整布局、字体大小和导航结构。
+
+---
+
+## 写作风格要求
+
+优先：
+- **具体表达**（用真实场景和代码说话，而非抽象概念）
+- **渐进讲解**（从简单到复杂，从具体到抽象）
+- **建立直觉**（解释"为什么"比罗列"是什么"更重要）
+- **例子贴近真实使用**（不是 `foo/bar`，而是实际项目会遇到的场景）
+- **解释设计权衡**（为什么这样设计？有什么替代方案？各有什么优缺点？）
+- **提供调试思路**（遇到问题怎么排查？常见错误信号是什么？）
+- **教程语气自然**（像有经验的工程师在分享，而非文档生成器）
+
+避免：
+- 只有 bullet list 的浅层章节
+- 大量未解释术语堆砌
+- 假设读者知道并未声明的背景
+- 填充式废话（"这个很重要"、"大家要注意"这类空话）
+- 能原封不动套到别的主题上的空泛内容
+- **玩具示例**（`add(1, 2)` 式的无意义演示代码）
+- **缺少错误处理的示例**（真实代码必须处理错误）
+- **没有使用场景说明的 API 列表**（不是 API 文档的翻译）
+
+利用 HTML 优势适度加入：
+- 可折叠的进阶/补充内容
+- 多语言对比标签页
+- 好/坏写法对照表格
+- 带样式的提示框（info / warning / tip / danger）
+- 步骤流程图
+- **实战代码示例**（可直接运行和修改）
+- **故障排查清单**（常见问题 + 解决方案）
+- 侧边注释
+
+---
+
+## 成功标准
+
+一套成功的教程体系应该：
+- **看起来像专业课程**，而非入门速成或玩具教程
+- **可以直接应用到实际工作**，学完能上手真实项目
+- **结构是为该主题量身定制的**，不是套模板
+- **深度相对均匀**，后面章节不是敷衍了事
+- **足够具体和可学习**，有真实代码、真实场景、真实问题
+- **全部使用中文讲解**
+- **视觉风格与主题匹配**
+- **充分利用 HTML 的表现力**（不是 markdown 换了个后缀）
+- **双击 index.html 即可开始学习**，无需任何工具链
+- **明显不是模板批量导出的产物**
+- **包含验证掌握程度的方式**（练习、项目、检查清单）
+- **提供深入学习路径**（官方文档、源码、进阶资料）
+
+**专业级教程的标志：**
+- 学习者完成后能在面试/工作中自信地使用该技术
+- 包含真实项目中会遇到的问题和解决方案
+- 不回避复杂性，但用渐进方式讲解
+- 示例代码可以作为实际项目的起点
+
+如果结果只是一个漂亮一点的课程提纲，或者只是把官方文档改写了一遍，那还不够好。
+
+---
+
+## 教程维护与版本管理
+
+### 版本标注
+
+在 `index.html` 中添加版本和更新信息：
+
+```html
+<div class="version-info">
+    <p><strong>版本：</strong>v1.2 | <strong>更新日期：</strong>2026-06-12</p>
+    <p><strong>适用版本：</strong>Python 3.10+</p>
+</div>
+```
+
+对应 CSS：
+```css
+.version-info {
+    background: #f0f0f0;
+    padding: 1em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 2em;
+}
+```
+
+### 更新策略
+
+**小更新**（修正错误、补充说明）：
+- 直接修改对应章节
+- 更新 `index.html` 的更新日期
+- 在章节顶部添加更新说明（可选）
+
+**大更新**（新增章节、重构内容）：
+- 升级版本号（v1.2 → v1.3）
+- 在 `index.html` 添加更新日志链接
+- 考虑创建 `CHANGELOG.md` 记录变更
+
+### 系列教程组织
+
+如果要创建多个相关教程（如"Python 基础" + "Python 进阶"），建议目录结构：
+
+```
+tutorials/
+├── index.html                    # 总索引页
+├── python-basics/                # 基础教程
+│   ├── index.html
+│   ├── 01-xxx.html
+│   └── assets/
+├── python-advanced/              # 进阶教程
+│   ├── index.html
+│   ├── 01-xxx.html
+│   └── assets/
+└── shared-assets/                # 共享资源（可选）
+    └── common.css
+```
+
+总索引页 `tutorials/index.html` 列出所有系列教程，说明学习顺序和依赖关系。
+
+---
+
+## 常见问题与解决方案
+
+### CDN 资源加载失败
+
+**问题**：Prism.js CDN 链接无法访问（国内网络环境、离线使用）
+
+**解决方案**：
+1. 使用国内镜像 CDN（如 BootCDN、字节跳动 CDN）
+2. 下载到本地 `assets/prism/` 目录
+3. 提供降级方案：CDN 失败时使用本地备份
+
+```html
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<link rel="stylesheet" href="assets/prism/prism.css">
+```
+
+### 代码块高亮不生效
+
+**原因**：语言标注错误或 Prism.js 未加载对应语言模块
+
+**检查**：
+- 确认 `<code class="language-python">` 中的语言名正确
+- 确认引入了对应语言的 JS 文件
+- 打开浏览器控制台查看是否有加载错误
+
+### 移动端显示异常
+
+**原因**：忘记添加 viewport meta 标签或响应式 CSS 未生效
+
+**解决**：
+- 确认每个 HTML 都有 `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+- 确认 `style.css` 包含 `@media` 查询
+- 测试时使用浏览器开发者工具的移动设备模拟
+
+### 练习题/思考题不够专业
+
+**原因**：题目过于简单或脱离实际
+
+**改进**：
+- 基础练习：修改示例代码，添加新功能
+- 进阶挑战：实现一个小型但完整的功能模块
+- 思考题：引导思考设计权衡、性能影响、边界情况

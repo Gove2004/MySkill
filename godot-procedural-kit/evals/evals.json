@@ -1,0 +1,35 @@
+{
+  "skill_name": "godot-procedural-kit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Godot 4 项目，我需要一个纯代码的圆形弹出菜单，右键在鼠标位置弹出一个圆盘，分成4个扇区，每个扇区画不同的几何图形。选中某个扇区后发出信号。不用任何贴图，全部用 _draw 绘制。能给我完整的脚本吗？",
+      "expected_output": "完整的 Control 圆形菜单脚本，包含 4 扇区几何绘制、角度判断选区、鼠标交互、信号发射",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我装了 gdfxr 插件，想在 Godot 4 项目里用程序化音效，不想放任何音频文件。需要两个脚本：一个是管理多种音效的库，带缓存和并发控制；另一个是背景音乐播放器，支持淡入淡出和交叉淡入淡出。能写一下吗？",
+      "expected_output": "SfxLibrary 和 BgmManager 两个完整 class_name 脚本，含示例配置",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Godot 4 里需要一个纯代码的粒子爆炸效果。圆形、三角形、矩形三种碎片向外扩散然后消失。场景里可能出现大量单位同时死亡，需要防卡顿机制，每帧只处理一部分。要两个脚本：粒子发射器和帧分摊队列。",
+      "expected_output": "GeometricParticleEmitter（class_name）+ EffectQueue 帧分摊系统",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "用 Godot 4 做游戏需要程序化生成地图，基于网格的。要求：网格大小可配、障碍物随机填充、必须有走廊保证从边缘到中心可达、有 BFS 验证连通性、有碰撞体和视觉绘制。核心算法要能脱离引擎复用。",
+      "expected_output": "网格地图生成算法（引擎无关部分） + Godot 实现（碰撞/绘制）",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Godot 4 纯代码游戏，我需要几个技能特效脚本。一个扩散圆环（像冲击波）、一个直线光束（像激光）、一个飞行后爆炸的弹体。全部用 Node2D + set_script() 动态绑定，自动播放自动消失。",
+      "expected_output": "ExpandingRing、Beam、Projectile 三个独立特效脚本，含调用示例",
+      "files": []
+    }
+  ]
+}
