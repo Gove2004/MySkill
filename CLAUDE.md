@@ -13,6 +13,7 @@ MySkill/
 ├── CLAUDE.md
 ├── README.md
 ├── ENV.md                   # .env / .env.example / _load_env() 规范
+├── NEW.md                   # 新建 Skill 指南
 ├── distribute.bat           # 一键分发脚本
 └── .gitignore
 ```
@@ -46,15 +47,8 @@ description: 简短描述，用于触发匹配。包含触发关键词。
 
 ## 通用规范
 
-### ENV 规范 (`ENV.md`)
-
-Skill 需要敏感配置（密钥、token、凭据）时，遵循三文件约定：
-
-- **`.env.example`** — 配置模板，占位值，入 git
-- **`.env`** — 真实凭据，不入 git
-- **脚本中** — 复制 `ENV.md` 中的 `_load_env()` 模板读取 `.env`
-
-详见 `ENV.md`，新增 Skill 时直接参考其中的模板代码。
+- **新建 Skill** — 参考 `NEW.md`，包含目录模板、SKILL.md 模板、命名约定、Checklist
+- **ENV 规范** — 参考 `ENV.md`，`.env.example` + `.env` + `_load_env()` 三件套
 
 ## 环境依赖
 
