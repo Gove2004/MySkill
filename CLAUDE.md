@@ -12,6 +12,7 @@ MySkill/
 ├── pdf-to-markdown/        # 文档转 Markdown（MinerU API）
 ├── CLAUDE.md
 ├── README.md
+├── distribute.bat          # 一键分发脚本
 └── .gitignore
 ```
 
