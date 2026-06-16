@@ -1,67 +1,49 @@
 # CLAUDE.md
 
-个人 Claude Code 技能集合。每个子目录是一个可安装的 Skill，包含 `SKILL.md`（技能定义与指令）及配套资源。
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 目录结构
+This is a monorepo of personal Claude Code skills. Each subdirectory is an independently installable skill. There is no build step, no test suite, and no shared code between skills.
 
-```
-MySkill/
-├── send-email-skill/        # SMTP 邮件发送
-├── kb/                      # RAG 知识库
-├── godot-procedural-kit/    # Godot 程序化内容工具包
-├── make-tutorial/           # 中文教程体系生成
-├── pdf-to-markdown/         # 文档转 Markdown（MinerU API）
-├── CLAUDE.md
-├── README.md
-├── ENV.md                   # .env / .env.example / _load_env() 规范
-├── NEW.md                   # 新建 Skill 指南
-├── distribute.bat           # 一键分发脚本
-└── .gitignore
-```
+## How skills work
 
-## Skill 约定
+A skill is a directory containing `SKILL.md` with YAML frontmatter:
 
-每个 Skill 目录标准结构：
-
-```text
-skill-name/
-├── SKILL.md          # 必需：技能元数据（YAML frontmatter）与详细指令
-├── .env.example      # 必需如有敏感配置：模板（占位值），入 git
-├── .env              # 可选如有敏感配置：真实凭据（已 gitignore）
-├── scripts/          # 可选：可执行脚本
-├── references/       # 可选：参考文档、模板、示例
-└── bundled_addons/   # 可选：内置第三方资源
-```
-
-### SKILL.md 格式
-
-```markdown
+```yaml
 ---
-name: skill-name
-description: 简短描述，用于触发匹配。包含触发关键词。
+name: skill-name          # must match directory name
+description: ...          # the ONLY trigger mechanism — include keywords in both English and Chinese
 ---
-
-# Skill 标题
-
-详细指令...
 ```
 
-## 通用规范
+Claude decides whether to invoke a skill based solely on `description`. Write it to be slightly over-triggered rather than under-triggered. Mention concrete trigger phrases ("send an email", "发邮件", "parse this PDF").
 
-- **新建 Skill** — 参考 `NEW.md`，包含目录模板、SKILL.md 模板、命名约定、Checklist
-- **ENV 规范** — 参考 `ENV.md`，`.env.example` + `.env` + `_load_env()` 三件套
+## Architecture rules
 
-## 环境依赖
+- **No shared code.** Every skill is self-contained. Even `_load_env()` is copied independently into each skill that needs it — there is no common library.
+- **Standard library first.** Scripts under `scripts/` use Python stdlib unless a third-party package is unavoidable.
+- **`.env` never committed.** Secrets go in `.env` (gitignored). Templates go in `.env.example` (committed, with placeholder values). Scripts read config via `_load_env()` — see `ENV.md` for the copy-paste template.
+- **`bundled_addons/` is third-party code.** Never modify files under any skill's `bundled_addons/` directory.
+- **`references/` is supplementary.** Long reference material (templates, examples, language codes) lives here so `SKILL.md` stays under ~500 lines.
 
-部分 Skill 脚本依赖 Python 第三方库：
+## Creating or editing a skill
 
-- `send-email-skill`：标准库，无额外依赖
-- `kb`：标准库，无额外依赖（需 SiliconFlow API key）
-- `pdf-to-markdown`：`requests`（MinerU API 调用）
+- **New skill:** Follow `NEW.md` — it has the directory template, SKILL.md template, naming conventions, and a checklist. Read it before starting.
+- **Adding config:** Follow `ENV.md` — create `.env.example`, copy `_load_env()` into the script, confirm `.gitignore` excludes `.env`.
+- **Editing existing skills:** Make surgical changes. Do not refactor adjacent code. Match existing style. Update `SKILL.md` if command paths, config keys, or behavior changes.
+- **After changes:** Run through the `NEW.md` checklist to verify nothing broke.
 
-## 注意事项
+## Naming conventions
 
-- `pdf-to-markdown/.env` 包含 MinerU API token，已在 `.gitignore` 排除
-- `send-email-skill/.env` 包含 SMTP 凭据，已在 `.gitignore` 排除
-- 各 Skill 的 `.env.example` 为配置模板，入 git，安装后复制为 `.env` 填入真实值
-- `Garbage/` 目录为无关数据，已在 `.gitignore` 排除
+| Thing | Rule | Example |
+|-------|------|---------|
+| Directory | lowercase + hyphens | `pdf-to-markdown` |
+| `name` in SKILL.md | same as directory | `pdf-to-markdown` |
+| Python scripts | lowercase + underscores | `send_mail.py` |
+| Config keys | UPPER_SNAKE_CASE | `MINERU_TOKEN` |
+
+## When NOT to do something
+
+- Do not create shared/utility modules — each skill stands alone.
+- Do not hardcode specific vendors, models, or paths in docs when they're configurable via `.env`.
+- Do not add features, abstractions, or error handling beyond what was requested.
+- Do not "improve" code in skills you weren't asked to touch.

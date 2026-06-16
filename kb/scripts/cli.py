@@ -18,6 +18,11 @@ import re
 import sys
 import urllib.request
 from collections import Counter, defaultdict
+
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
 from pathlib import Path
 
 # ── 配置 ──────────────────────────────────────────────────
@@ -39,12 +44,12 @@ def _load_env() -> dict[str, str]:
             continue
         if "=" in line:
             k, v = line.split("=", 1)
-            env[k.strip()] = v.strip()
+            env[k.strip()] = v.strip().strip("\"'")
     return env
 
 
 _env = _load_env()
-KB_PATH = Path(_env.get("DEFAULT_KB_PATH", str(_SCRIPT_DIR.parent)))
+KB_PATH = Path(_env.get("KB_PATH", str(_SCRIPT_DIR.parent)))
 EMBEDDING_API_KEY = _env.get("EMBEDDING_API_KEY", "")
 EMBEDDING_BASE_URL = _env.get("EMBEDDING_BASE_URL", "")
 EMBEDDING_MODEL = _env.get("EMBEDDING_MODEL", "")

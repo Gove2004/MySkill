@@ -5,7 +5,7 @@ description: RAG knowledge base. Use when user asks to record notes, query knowl
 
 # RAG 知识库
 
-零外部依赖的本地 RAG 知识库。数据存储在 `DEFAULT_KB_PATH`（见 `.env`），CLI 脚本 `cli.py` 位于本 Skill 根目录。
+零外部依赖的本地 RAG 知识库。数据存储在 `KB_PATH`（见 `.env`），CLI 脚本位于 `scripts/cli.py`。
 
 核心原则：知识库只返回检索到的原文片段，你负责根据片段回答用户。
 
@@ -15,10 +15,10 @@ description: RAG knowledge base. Use when user asks to record notes, query knowl
 
 | 变量 | 说明 | 默认值 |
 |------|------|--------|
-| `EMBEDDING_API_KEY` | SiliconFlow API key | — |
+| `EMBEDDING_API_KEY` | Embedding API 密钥 | — |
 | `EMBEDDING_BASE_URL` | Embedding API 地址 | `https://api.siliconflow.cn/v1` |
 | `EMBEDDING_MODEL` | Embedding 模型 | `Qwen/Qwen3-Embedding-4B` |
-| `DEFAULT_KB_PATH` | 知识库数据目录 | `D:/Data/Knowledge` |
+| `KB_PATH` | 知识库数据目录 | `D:/Data/Knowledge` |
 | `CHUNK_SIZE` | 分块大小 | `800` |
 | `CHUNK_OVERLAP` | 分块重叠 | `100` |
 | `TOP_K` | 默认检索条数 | `5` |
@@ -47,4 +47,4 @@ python scripts/cli.py clear
 
 ## 技术
 
-零外部依赖（纯标准库）。Embedding：SiliconFlow Qwen3-Embedding-4B。向量搜索：纯 Python L2。
+零外部依赖（纯标准库）。Embedding 模型与 API 端点由 `.env` 配置。向量搜索：纯 Python L2。

@@ -21,6 +21,11 @@ import zipfile
 import urllib.error
 import urllib.request
 
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
 
 def _load_token():
     """Load MinerU token from .env file (relative to this script)."""

@@ -13,7 +13,7 @@ Convert documents (PDF, Word, PPT, Excel, images, HTML) to clean, structured Mar
 python scripts/parse_pdf.py --pdf <path>
 ```
 
-This defaults to Precision API (vlm model) with the bundled token. The script uploads the file, polls until done, saves `<name>.md` alongside the PDF, and prints a preview.
+This defaults to Precision API (vlm model) with the token configured in `.env`. The script uploads the file, polls until done, saves `<name>.md` alongside the PDF, and prints a preview.
 
 After the script completes, read the `.md` file with the Read tool to present content to the user.
 

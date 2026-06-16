@@ -9,6 +9,11 @@ from email.mime.base import MIMEBase
 from email import encoders
 from email.header import Header
 
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
+
 
 def _load_env():
     """Load SMTP config from .env file (relative to this script)."""

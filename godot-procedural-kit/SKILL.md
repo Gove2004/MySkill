@@ -76,7 +76,6 @@ description: >
 - `gdfxr/` — 程序化音效生成
 - `sound_manager/` — 音频播放管理
 - `phantom_camera/` — 相机相关能力
-- `godot_state_charts/` — 状态流转管理
 
 ## 插件使用原则
 

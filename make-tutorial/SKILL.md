@@ -176,10 +176,7 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 - 如果有现有文档，用 `Glob` + `Read` 分析
 - **主题风格自动判断**：技术类→tech，数学类→math，科学类→science（用户无需关心，自动选择最合适的）
 - 缺关键信息时才提问（默认：系统掌握级别）
-- **章节规模**：
-  - 小型教程（≤8章）：直接一次性生成
-  - 中型教程（9-15章）：询问用户是一次性生成还是分批
-  - 大型教程（>15章）：建议缩小范围或拆分成多个独立教程
+- **章节生成**：不论多少章，一张一张生成。生成完一章再生成下一章。
 
 ### Phase 2：生成教程文件
 1. 先 `Read references/assets.md` 获取 CSS/JS 代码
@@ -255,99 +252,7 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 
 ### index.html 完整示例
 
-**读者视角设计要点：**
-- 清晰的学习路径（基础→进阶→高级标注）
-- 预计学习时间（可选）
-- 前置知识说明
-- 主题风格说明（让读者知道为什么是这个配色）
-
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python 进阶教程</title>
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="assets/theme-tech.css">
-</head>
-<body>
-    <main>
-        <h1>Python 进阶教程</h1>
-        <p class="intro">深入掌握 Python 高级特性，包含生产环境实战经验、性能优化和最佳实践。</p>
-        
-        <div class="callout callout-info">
-            <strong>关于本教程</strong>：
-            <ul>
-                <li><strong>前置知识</strong>：已掌握 Python 基础语法（变量、函数、类）</li>
-                <li><strong>学习深度</strong>：系统掌握，包含生产实践和调试技巧</li>
-                <li><strong>主题风格</strong>：技术蓝（适合编程类教程，代码高亮优化）</li>
-            </ul>
-        </div>
-
-        <h2>课程目录</h2>
-        
-        <div class="chapter-list">
-            <div class="chapter-item">
-                <span class="chapter-badge basic">基础</span>
-                <h3><a href="01-iterators-generators.html">01 - 迭代器与生成器</a></h3>
-                <p>理解迭代协议、生成器表达式、yield 关键字和惰性求值</p>
-            </div>
-            
-            <div class="chapter-item">
-                <span class="chapter-badge basic">基础</span>
-                <h3><a href="02-decorators.html">02 - 装饰器深入</a></h3>
-                <p>函数装饰器、类装饰器、装饰器工厂和常见应用场景</p>
-            </div>
-            
-            <div class="chapter-item">
-                <span class="chapter-badge basic">基础</span>
-                <h3><a href="03-context-managers.html">03 - 上下文管理器</a></h3>
-                <p>with 语句原理、自定义上下文管理器、资源管理最佳实践</p>
-            </div>
-            
-            <div class="chapter-item">
-                <span class="chapter-badge intermediate">进阶</span>
-                <h3><a href="04-exception-handling.html">04 - 异常处理最佳实践</a></h3>
-                <p>异常链、重试策略、调试技巧和生产环境错误处理</p>
-            </div>
-            
-            <div class="chapter-item">
-                <span class="chapter-badge intermediate">进阶</span>
-                <h3><a href="05-concurrency.html">05 - 并发编程</a></h3>
-                <p>多线程、多进程、asyncio、GIL 和性能权衡</p>
-            </div>
-            
-            <div class="chapter-item">
-                <span class="chapter-badge advanced">高级</span>
-                <h3><a href="06-metaclasses.html">06 - 元类与类型系统</a></h3>
-                <p>元类、类型注解、Protocol 和运行时类型检查</p>
-            </div>
-        </div>
-
-        <h2>学习资源</h2>
-        <ul>
-            <li><a href="https://docs.python.org/3/" target="_blank">Python 官方文档</a></li>
-            <li><a href="https://peps.python.org/" target="_blank">Python 增强提案 (PEPs)</a></li>
-        </ul>
-    </main>
-</body>
-</html>
-```
-
-对应的 CSS 添加到 `style.css`：
-```css
-.intro { font-size: 1.1em; color: #555; margin-bottom: 2em; }
-.chapter-list { display: flex; flex-direction: column; gap: 1.5em; }
-.chapter-item { border: 1px solid #ddd; border-radius: 8px; padding: 1.5em; background: #fafafa; }
-.chapter-item h3 { margin: 0.5em 0; }
-.chapter-item a { text-decoration: none; color: #007acc; }
-.chapter-item a:hover { text-decoration: underline; }
-.chapter-badge { display: inline-block; padding: 0.2em 0.8em; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin-right: 0.5em; }
-.chapter-badge.basic { background: #e8f5e9; color: #2e7d32; }
-.chapter-badge.intermediate { background: #fff3e0; color: #e65100; }
-.chapter-badge.advanced { background: #fce4ec; color: #c2185b; }
-```
+参考 `references/index-template.md` 获取完整的 index.html 模板和配套 CSS。
 
 ---
 
@@ -446,9 +351,6 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 - 使用语义化标签（`<nav>`, `<main>`, `<article>`）
 - 确保键盘导航可访问所有交互元素
 - 文本与背景对比度 ≥ 4.5:1
-
----
-
 5. **替代文本**：图片、图表必须有 `alt` 描述
 
 **示例改进：**
@@ -592,43 +494,4 @@ tutorials/
 
 ## 常见问题与解决方案
 
-### CDN 资源加载失败
-
-**问题**：Prism.js CDN 链接无法访问（国内网络环境、离线使用）
-
-**解决方案**：
-1. 使用国内镜像 CDN（如 BootCDN、字节跳动 CDN）
-2. 下载到本地 `assets/prism/` 目录
-3. 提供降级方案：CDN 失败时使用本地备份
-
-```html
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-<link rel="stylesheet" href="assets/prism/prism.css">
-```
-
-### 代码块高亮不生效
-
-**原因**：语言标注错误或 Prism.js 未加载对应语言模块
-
-**检查**：
-- 确认 `<code class="language-python">` 中的语言名正确
-- 确认引入了对应语言的 JS 文件
-- 打开浏览器控制台查看是否有加载错误
-
-### 移动端显示异常
-
-**原因**：忘记添加 viewport meta 标签或响应式 CSS 未生效
-
-**解决**：
-- 确认每个 HTML 都有 `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
-- 确认 `style.css` 包含 `@media` 查询
-- 测试时使用浏览器开发者工具的移动设备模拟
-
-### 练习题/思考题不够专业
-
-**原因**：题目过于简单或脱离实际
-
-**改进**：
-- 基础练习：修改示例代码，添加新功能
-- 进阶挑战：实现一个小型但完整的功能模块
-- 思考题：引导思考设计权衡、性能影响、边界情况
+参考 `references/troubleshooting.md` 获取 CDN 加载失败、代码高亮不生效、移动端显示异常、练习题设计等常见问题的解决方案。
