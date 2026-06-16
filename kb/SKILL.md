@@ -28,12 +28,12 @@ description: RAG knowledge base. Use when user asks to record notes, query knowl
 所有路径相对于本 Skill 根目录：
 
 ```bash
-python cli.py add "<标题>" "<内容>"
-python cli.py query "<问题>" [-k N]
-python cli.py delete "<内容描述>"
-python cli.py list
-python cli.py rebuild
-python cli.py clear
+python scripts/cli.py add "<标题>" "<内容>"
+python scripts/cli.py query "<问题>" [-k N]
+python scripts/cli.py delete "<内容描述>"
+python scripts/cli.py list
+python scripts/cli.py rebuild
+python scripts/cli.py clear
 ```
 
 ## 命令说明

@@ -23,7 +23,7 @@ from pathlib import Path
 # ── 配置 ──────────────────────────────────────────────────
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_ENV_FILE = _SCRIPT_DIR / ".env"
+_ENV_FILE = _SCRIPT_DIR.parent / ".env"
 
 SUFFIXES = {".md", ".txt"}
 CONFIG_FILES = {"cli.py", ".env", "requirements.txt"}

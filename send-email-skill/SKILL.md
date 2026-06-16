@@ -1,5 +1,5 @@
 ---
-name: send-email
+name: send-email-skill
 description: Use this skill to send emails directly via SMTP. Trigger this when the user asks to "send an email", "email this file", "notify via email", or "发邮件".
 ---
 
