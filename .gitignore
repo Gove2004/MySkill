@@ -17,6 +17,3 @@ __pycache__/
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-# 无关数据
-Garbage/
