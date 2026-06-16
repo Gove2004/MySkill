@@ -1,122 +1,43 @@
-# MySkill — 个人 Claude Code 技能集合
+# MySkill
 
-五个独立可安装的 Claude Code Skill，覆盖文档处理、内容生成、游戏开发、知识管理和工具集成。
+个人 Claude Code 技能集合。每个子目录是一个可独立安装的 Skill。
 
-## 技能列表
+## 技能
 
-| 技能 | 说明 | 触发方式 |
-|------|------|----------|
-| **pdf-to-markdown** | PDF/Word/PPT/Excel/图片 → Markdown，基于 MinerU API，支持表格、公式、多栏布局 | `帮我读这个PDF`、`解析这个文档` |
-| **make-tutorial** | 生成专业级中文教程（多文件 HTML 站点），含代码高亮、交互组件、多种主题风格 | `做教程`、`写课程`、`整理成教程` |
-| **godot-procedural-kit** | Godot 程序化内容工具包 — `_draw()` 几何绘制、程序化粒子/音效、网格地图生成 | Godot 项目中的程序化生成需求 |
-| **kb** | 本地 RAG 知识库，零外部依赖，语义检索 + 智能删除 | `记录`、`查一下`、`知识库`、`搜一下` |
-| **send-email-skill** | 直接通过 SMTP 发送邮件，支持 HTML 正文和附件 | `发邮件`、`send an email` |
+| 技能 | 说明 |
+|------|------|
+| `kb/` | 本地 RAG 知识库，语义检索 + 智能删除 |
+| `pdf-to-markdown/` | PDF/文档转 Markdown，基于 MinerU API |
+| `make-tutorial/` | 专业级中文教程生成（多文件 HTML 站点） |
+| `godot-procedural-kit/` | Godot 程序化内容工具包 |
+| `send-email-skill/` | SMTP 邮件发送，支持 HTML 和附件 |
 
-## 安装
+## 快速开始
 
-将技能目录复制到 `~/.claude/skills/` 或项目的 `.claude/skills/` 下即可。
+### 安装
 
-```bash
-# 安装单个技能
-cp -r MySkill/pdf-to-markdown ~/.claude/skills/
-
-# 或安装全部
-cp -r MySkill/*/ ~/.claude/skills/
-```
-
-## 环境要求
-
-- Python 3.x（`pdf-to-markdown`、`send-email-skill` 需要）
-- `pdf-to-markdown` 额外依赖：`pip install requests`
-- `send-email-skill` 使用 Python 标准库，无需额外安装
-
-## 目录结构
-
-```
-MySkill/
-├── send-email-skill/
-│   ├── SKILL.md
-│   ├── .env.example
-│   └── scripts/send_mail.py
-├── kb/
-│   ├── SKILL.md
-│   ├── cli.py
-│   ├── .env.example
-│   └── .env               # API key（不入库）
-├── godot-procedural-kit/
-│   ├── SKILL.md
-│   ├── references/
-│   └── bundled_addons/    # gdfxr, sound_manager, phantom_camera
-├── make-tutorial/
-│   ├── SKILL.md
-│   └── references/
-├── pdf-to-markdown/
-│   ├── SKILL.md
-│   ├── scripts/parse_pdf.py
-│   ├── references/
-│   ├── .env.example
-│   └── .env               # MinerU token（不入库）
-├── CLAUDE.md
-├── README.md
-├── ENV.md                  # .env 规范
-├── NEW.md                  # 新建 Skill 指南
-├── distribute.bat          # 一键分发脚本
-└── .gitignore
-```
-
-## 技能详情
-
-### pdf-to-markdown
-
-支持格式：PDF、DOC/DOCX、PPT/PPTX、XLS/XLSX、PNG/JPG/WebP、HTML
-
-- **Precision API**（默认）：最佳质量，支持表格/公式识别，限制 200MB/200页
-- **Agent API**（回退）：轻量快速，无需 token，限制 10MB/20页
+将技能目录复制到 `~/.claude/skills/` 即可：
 
 ```bash
-python scripts/parse_pdf.py --pdf document.pdf
-python scripts/parse_pdf.py --pdf image.png --ocr --language en
+cp -r MySkill/kb ~/.claude/skills/
 ```
 
-### make-tutorial
+或一键分发全部（Windows）：
 
-生成可直接在浏览器中打开的多文件 HTML 教程站点：
-
-- 6 种主题风格自动适配（技术/数学/科学/设计/人文/商业）
-- 代码语法高亮（Prism.js）+ 一键复制
-- 可折叠章节、提示框、标签页、步骤流程图
-- 专业级内容：实战示例、故障排查、最佳实践、练习题
-
-### godot-procedural-kit
-
-面向 Godot 引擎的程序化内容生成方案：
-
-- `_draw()` 几何绘制与几何 UI
-- 脚本驱动的粒子系统
-- 基于 gdfxr 的程序化音效
-- 网格地图与结构生成
-- 内置可直接复制的 addon：gdfxr、sound_manager、phantom_camera
-
-### kb
-
-本地 RAG 知识库，零外部依赖（纯 Python 标准库）：
-
-- 语义检索 — 自然语言查询，返回相关原文片段
-- 智能删除 — 检索定位 → 精准移除 → 自动重建索引
-- Embedding：SiliconFlow Qwen3-Embedding-4B
-- 向量搜索：纯 Python L2 距离
-
-```bash
-python cli.py add "标题" "内容"
-python cli.py query "问题"
-python cli.py list
+```bat
+distribute.bat
 ```
 
-### send-email-skill
+### 新建技能
 
-```bash
-python scripts/send_mail.py --to "user@example.com" --subject "标题" --body "正文"
-python scripts/send_mail.py --to "user@example.com" --subject "报告" --body "<h1>报告</h1>" --html --attachment report.pdf
-```
+参考 [NEW.md](NEW.md)。
 
-默认收件人为 `3425519400@qq.com`，SMTP 通过 QQ 邮箱发送。
+## 规范
+
+- **[ENV.md](ENV.md)** — 敏感配置三件套：`.env.example` + `.env` + `_load_env()`
+- **[NEW.md](NEW.md)** — 新建 Skill 模板与 Checklist
+
+## 要求
+
+- Python 3.x（部分 Skill 脚本需要）
+- 具体依赖见各 Skill 的 `SKILL.md`
