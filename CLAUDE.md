@@ -6,13 +6,14 @@
 
 ```
 MySkill/
-├── send-email-skill/       # SMTP 邮件发送
-├── godot-procedural-kit/   # Godot 程序化内容工具包
-├── make-tutorial/          # 中文教程体系生成
-├── pdf-to-markdown/        # 文档转 Markdown（MinerU API）
+├── send-email-skill/        # SMTP 邮件发送
+├── godot-procedural-kit/    # Godot 程序化内容工具包
+├── make-tutorial/           # 中文教程体系生成
+├── pdf-to-markdown/         # 文档转 Markdown（MinerU API）
 ├── CLAUDE.md
 ├── README.md
-├── distribute.bat          # 一键分发脚本
+├── ENV.md                   # .env / .env.example / _load_env() 规范
+├── distribute.bat           # 一键分发脚本
 └── .gitignore
 ```
 
@@ -43,12 +44,17 @@ description: 简短描述，用于触发匹配。包含触发关键词。
 详细指令...
 ```
 
-### 设计原则
+## 通用规范
 
-- **独立可安装**：每个 Skill 是一个自包含目录，可复制到其他项目
-- **脚本优先**：Python 脚本收在 `scripts/`，用绝对路径引用
-- **敏感信息隔离**：密钥、token、凭据一律存入 `.env`，不硬编码。同时提供 `.env.example` 模板（占位值）供参考，`.env.example` 入 git，`.env` 不入。
-- **引用文件**：长篇参考内容放 `references/`，SKILL.md 通过表格索引
+### ENV 规范 (`ENV.md`)
+
+Skill 需要敏感配置（密钥、token、凭据）时，遵循三文件约定：
+
+- **`.env.example`** — 配置模板，占位值，入 git
+- **`.env`** — 真实凭据，不入 git
+- **脚本中** — 复制 `ENV.md` 中的 `_load_env()` 模板读取 `.env`
+
+详见 `ENV.md`，新增 Skill 时直接参考其中的模板代码。
 
 ## 环境依赖
 
