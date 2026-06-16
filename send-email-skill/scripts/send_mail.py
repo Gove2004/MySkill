@@ -10,11 +10,34 @@ from email.mime.base import MIMEBase
 from email import encoders
 from email.header import Header
 
-# 读取全局配置
-smtp_server = "smtp.qq.com"
-smtp_port = 465
-sender_email = "3425519400@qq.com"
-auth_code = "utiihlwzsdibdbhg"
+
+def _load_env():
+    """Load SMTP config from .env file (relative to this script)."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(script_dir, "..", ".env"),   # skill root
+        os.path.join(script_dir, ".env"),          # scripts/
+    ]
+    env = {}
+    for env_path in candidates:
+        try:
+            with open(env_path) as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("#") or "=" not in line:
+                        continue
+                    k, v = line.split("=", 1)
+                    env[k.strip()] = v.strip().strip('"').strip("'")
+        except FileNotFoundError:
+            continue
+    return env
+
+
+_env = _load_env()
+smtp_server = _env.get("SMTP_SERVER", "smtp.qq.com")
+smtp_port = int(_env.get("SMTP_PORT", "465"))
+sender_email = _env.get("SENDER_EMAIL", "")
+auth_code = _env.get("AUTH_CODE", "")
 
 def send_email(to_addrs, subject, body, is_html=False, attachments=None):
     if not sender_email or not auth_code:
