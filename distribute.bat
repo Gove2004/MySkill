@@ -6,7 +6,7 @@ echo   MySkill - Skill Distribute
 echo ============================================
 echo.
 
-set /p TARGET="Target path (e.g. C:\Users\Gove2\.claude): "
+set /p TARGET="Target path, e.g. C:\Users\Gove2\.claude: "
 
 set TARGET=%TARGET:"=%
 if "%TARGET:~-1%"=="\" set TARGET=%TARGET:~0,-1%
@@ -55,7 +55,7 @@ set DST=%SKILLS_DIR%\%~1
 if not exist "%DST%" goto :sync_copy
 
 echo [CHECK] %~1 exists
-set /p CONFIRM="   Overwrite? (y/n): "
+set /p CONFIRM="   Overwrite? y/n: "
 if /i "%CONFIRM%"=="y" goto :sync_overwrite
 echo    [SKIP] %~1
 goto :eof
