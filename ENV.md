@@ -45,16 +45,9 @@ _env = _load_env()
 MY_KEY = _env.get("MY_KEY", "默认值")
 ```
 
-## 已有 Skill 参考
+## 新建 Skill 步骤
 
-| Skill | 配置项 |
-|-------|--------|
-| `pdf-to-markdown/` | `MINERU_TOKEN` |
-| `send-email-skill/` | `SMTP_SERVER`, `SMTP_PORT`, `SENDER_EMAIL`, `AUTH_CODE` |
-
-## 新增 Skill 步骤
-
-1. 复制此 `ENV.md` 中的 `_load_env()` 模板到你的脚本
+1. 复制此文件中的 `_load_env()` 模板到你的脚本
 2. 创建 `.env.example`，列出所有配置项 + 占位值
 3. 复制 `.env.example` → `.env`，填入真实值
 4. 确认 `.gitignore` 已排除 `.env`（不排除 `.env.example`）

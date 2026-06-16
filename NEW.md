@@ -78,7 +78,7 @@ description: PDF to Markdown converter.
 - **用祈使句**，直接告诉 Claude 怎么做。
 - **解释为什么**，而不只是堆 MUST / ALWAYS。模型需要理解意图才能应对变化。
 - **给出可复制的代码**而不是抽象描述。
-- **示例**比规则更有用。有输入/输出示例时，格式参考 `skill-creator` 的写法。
+- **示例**比规则更有用。有输入/输出示例时，用具体用例展示效果。
 - **<500 行**，太长了就拆到 `references/`。
 
 ### 触发条件怎么写
@@ -125,15 +125,6 @@ skill_root = os.path.join(script_dir, "..")
 | SKILL.md name | 同目录名 | `pdf-to-markdown` |
 | 章节文件 | `01-标题.html` | `01-iterators.html` |
 | 脚本 | 小写 + 下划线 | `send_mail.py` |
-
-## 参考现有 Skill
-
-| Skill | 特点 | 可参考 |
-|-------|------|--------|
-| `pdf-to-markdown/` | 有 .env、有 scripts/、有 references/ | 完整示例 |
-| `send-email-skill/` | 有 .env、有 scripts/、简洁 | 简单 Skill 模板 |
-| `make-tutorial/` | 只有 SKILL.md + references/ | 纯指令型 Skill |
-| `godot-procedural-kit/` | 有 bundled_addons/ | 带第三方资源的 Skill |
 
 ## 新建 Checklist
 
