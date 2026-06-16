@@ -29,12 +29,13 @@ if not exist "%SKILLS_DIR%" (
 echo.
 echo 即将同步以下技能到 %SKILLS_DIR%:
 echo   - send-email-skill
+echo   - kb
 echo   - godot-procedural-kit
 echo   - make-tutorial
 echo   - pdf-to-markdown
 echo.
 
-set SKILLS=send-email-skill godot-procedural-kit make-tutorial pdf-to-markdown
+set SKILLS=send-email-skill kb godot-procedural-kit make-tutorial pdf-to-markdown
 
 for %%s in (%SKILLS%) do (
     set SRC=%~dp0%%s

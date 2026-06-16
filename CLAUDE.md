@@ -7,6 +7,7 @@
 ```
 MySkill/
 ├── send-email-skill/        # SMTP 邮件发送
+├── kb/                      # RAG 知识库
 ├── godot-procedural-kit/    # Godot 程序化内容工具包
 ├── make-tutorial/           # 中文教程体系生成
 ├── pdf-to-markdown/         # 文档转 Markdown（MinerU API）
@@ -55,6 +56,7 @@ description: 简短描述，用于触发匹配。包含触发关键词。
 部分 Skill 脚本依赖 Python 第三方库：
 
 - `send-email-skill`：标准库，无额外依赖
+- `kb`：标准库，无额外依赖（需 SiliconFlow API key）
 - `pdf-to-markdown`：`requests`（MinerU API 调用）
 
 ## 注意事项

@@ -1,6 +1,6 @@
 # MySkill — 个人 Claude Code 技能集合
 
-四个独立可安装的 Claude Code Skill，覆盖文档处理、内容生成、游戏开发和工具集成。
+五个独立可安装的 Claude Code Skill，覆盖文档处理、内容生成、游戏开发、知识管理和工具集成。
 
 ## 技能列表
 
@@ -9,6 +9,7 @@
 | **pdf-to-markdown** | PDF/Word/PPT/Excel/图片 → Markdown，基于 MinerU API，支持表格、公式、多栏布局 | `帮我读这个PDF`、`解析这个文档` |
 | **make-tutorial** | 生成专业级中文教程（多文件 HTML 站点），含代码高亮、交互组件、多种主题风格 | `做教程`、`写课程`、`整理成教程` |
 | **godot-procedural-kit** | Godot 程序化内容工具包 — `_draw()` 几何绘制、程序化粒子/音效、网格地图生成 | Godot 项目中的程序化生成需求 |
+| **kb** | 本地 RAG 知识库，零外部依赖，语义检索 + 智能删除 | `记录`、`查一下`、`知识库`、`搜一下` |
 | **send-email-skill** | 直接通过 SMTP 发送邮件，支持 HTML 正文和附件 | `发邮件`、`send an email` |
 
 ## 安装
@@ -37,6 +38,11 @@ MySkill/
 │   ├── SKILL.md
 │   ├── .env.example
 │   └── scripts/send_mail.py
+├── kb/
+│   ├── SKILL.md
+│   ├── cli.py
+│   ├── .env.example
+│   └── .env               # API key（不入库）
 ├── godot-procedural-kit/
 │   ├── SKILL.md
 │   ├── references/
@@ -90,6 +96,21 @@ python scripts/parse_pdf.py --pdf image.png --ocr --language en
 - 基于 gdfxr 的程序化音效
 - 网格地图与结构生成
 - 内置可直接复制的 addon：gdfxr、sound_manager、phantom_camera
+
+### kb
+
+本地 RAG 知识库，零外部依赖（纯 Python 标准库）：
+
+- 语义检索 — 自然语言查询，返回相关原文片段
+- 智能删除 — 检索定位 → 精准移除 → 自动重建索引
+- Embedding：SiliconFlow Qwen3-Embedding-4B
+- 向量搜索：纯 Python L2 距离
+
+```bash
+python cli.py add "标题" "内容"
+python cli.py query "问题"
+python cli.py list
+```
 
 ### send-email-skill
 
