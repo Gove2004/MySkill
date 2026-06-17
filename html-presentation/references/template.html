@@ -1,0 +1,235 @@
+<!--
+  HTML Presentation Template
+  ==========================
+  Annotated reference for Claude to generate presentations.
+
+  PATTERNS (search by tag):
+    [HERO]     - Full-viewport title slide with gradient text
+    [GRID]     - Card grid layout (tech stacks, features, comparisons)
+    [FLOW]     - Numbered step flow (workflows, pipelines, processes)
+    [STATS]    - Statistics display (metrics, achievements)
+    [CODE]     - Inline code styling
+    [END]      - Ending slide / call to action
+
+  FEATURES:
+    - Dark/light theme toggle (sun/moon SVG, top-right)
+    - Fullscreen presentation mode (play SVG button, top-right)
+    - Keyboard nav: ArrowLeft/Right, ArrowUp/Down, PageUp/PageDown, Space, Home, End
+    - Slide counter in presentation mode (e.g., "3 / 12")
+    - ESC or click X (top-right) to exit presentation mode
+    - Auto-exits presentation when browser exits fullscreen
+
+  THEME:
+    Dark by default. Customize accent: change --accent in both :root and [data-theme="light"],
+    and the second gradient color in .hero h1 and .flow-item .num.
+
+  USAGE:
+    Copy <style> block as-is. Copy <script> block as-is.
+    Copy the 3 toolbar HTML elements (toolbar, exit-btn, slide-counter).
+    Replace body content with your own sections.
+    Each presentation = one self-contained .html file.
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Presentation Title</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--text:#fff;--accent:#00d4ff}
+[data-theme="light"]{--bg:#fff;--text:#000;--accent:#0066cc}
+body{font-family:sans-serif;background:var(--bg);color:var(--text);transition:all 0.3s}
+
+/* Top-right toolbar */
+.toolbar{position:fixed;top:30px;right:30px;z-index:1000;display:flex;gap:12px}
+.toolbar button{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);transition:all 0.2s}
+.toolbar button:hover{transform:scale(1.1);border-color:var(--accent)}
+.toolbar button svg{width:22px;height:22px}
+
+/* [HERO] Full-viewport landing */
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.hero h1{font-size:6vw;font-weight:700;background:linear-gradient(90deg,var(--accent),#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.4rem;opacity:0.8;margin-top:20px}
+
+/* [GRID] Card grid */
+.section{min-height:100vh;padding:10vh 5vw;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1400px;width:100%}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:30px;transition:all 0.3s}
+.card:hover{transform:translateY(-5px);border-color:var(--accent)}
+.card h3{color:var(--accent);margin-bottom:12px}
+.card p{opacity:0.8;line-height:1.6}
+
+/* [FLOW] Numbered steps */
+.flow{max-width:900px;width:100%}
+.flow-item{display:flex;gap:25px;margin:25px 0;padding:25px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:12px}
+.flow-item .num{min-width:50px;height:50px;background:linear-gradient(135deg,var(--accent),#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:1.2rem}
+.flow-item .text h4{color:var(--accent);margin-bottom:8px}
+.flow-item .text p{opacity:0.8;line-height:1.6}
+
+/* [CODE] Inline code */
+code{background:rgba(124,58,237,0.15);padding:3px 8px;border-radius:4px;color:var(--accent);font-family:'Consolas','Monaco',monospace;font-size:0.9em}
+pre{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;overflow-x:auto;max-width:900px;width:100%}
+pre code{background:none;padding:0}
+
+/* [STATS] Statistics */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:1200px;width:100%}
+.stat{text-align:center;padding:30px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:12px}
+.stat .value{font-size:2.5rem;font-weight:700;color:var(--accent)}
+.stat p{opacity:0.7;margin-top:8px}
+
+/* Section title */
+h2{font-size:3rem;text-align:center;margin-bottom:60px}
+
+/* [END] Ending slide */
+.end{min-height:50vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+.end h1{font-size:3rem;margin-bottom:30px}
+
+/* Light theme overrides */
+[data-theme="light"] .card,[data-theme="light"] .flow-item,[data-theme="light"] .stat,[data-theme="light"] pre{background:#fff;border-color:#e0e0e0}
+
+/* ═══════════════════════════════════════════════════════════
+   PRESENTATION MODE
+   ═══════════════════════════════════════════════════════════ */
+
+.slide-counter{display:none}
+[data-presentation="true"] .slide-counter{
+  display:block;position:fixed;bottom:24px;right:30px;z-index:1001;
+  font-size:0.9rem;opacity:0.5;font-variant-numeric:tabular-nums
+}
+
+.exit-btn{display:none}
+[data-presentation="true"] .exit-btn{
+  display:flex;position:fixed;top:24px;right:30px;z-index:1001;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+  cursor:pointer;align-items:center;justify-content:center;color:var(--text)
+}
+.exit-btn svg{width:18px;height:18px}
+
+[data-presentation="true"] .toolbar{display:none}
+
+[data-presentation="true"] .hero,
+[data-presentation="true"] .section,
+[data-presentation="true"] .end{
+  display:none;height:100vh;min-height:100vh;overflow-y:auto;
+  padding:8vh 6vw
+}
+[data-presentation="true"] .hero.active,
+[data-presentation="true"] .section.active,
+[data-presentation="true"] .end.active{display:flex}
+
+[data-presentation="true"] h2{font-size:2.5rem;margin-bottom:40px}
+[data-presentation="true"] .hero h1{font-size:5vw}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+  CONTENT: Replace everything below with your slides.
+  A slide is one of: <div class="hero">, <div class="section">, <div class="end">
+  See patterns in SKILL.md or the annotated comments above.
+  ═══════════════════════════════════════════════════════════ -->
+
+<!-- [HERO] -->
+<div class="hero">
+  <h1>Presentation Title</h1>
+  <p>Subtitle or one-line summary of the topic</p>
+</div>
+
+<!-- ... your slides here ... -->
+
+<!-- [END] -->
+<div class="end">
+  <h1>Thank You</h1>
+  <p style="font-size:1.2rem">Questions? / Contact info / Repository link</p>
+</div>
+
+<!-- Toolbar: theme toggle + present button -->
+<div class="toolbar">
+  <button id="themeBtn" onclick="toggleTheme()" title="切换主题">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/>
+      <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+  </button>
+  <button onclick="startPresentation()" title="全屏放映">
+    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+  </button>
+</div>
+
+<!-- Exit presentation button (only visible in present mode, top-right) -->
+<button class="exit-btn" onclick="stopPresentation()" title="退出放映">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</button>
+
+<!-- Slide counter (only visible in present mode) -->
+<div class="slide-counter"></div>
+
+<script>
+// ── Theme ──────────────────────────────────────────────────
+const sunIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+const moonIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+function toggleTheme(){
+  const html=document.documentElement;
+  const current=html.getAttribute("data-theme");
+  const next=current==="light"?"dark":"light";
+  html.setAttribute("data-theme",next);
+  localStorage.setItem("theme",next);
+  document.getElementById("themeBtn").innerHTML=next==="light"?moonIcon:sunIcon;
+}
+const saved=localStorage.getItem("theme")||"dark";
+document.documentElement.setAttribute("data-theme",saved);
+document.getElementById("themeBtn").innerHTML=saved==="light"?moonIcon:sunIcon;
+
+// ── Presentation Mode ──────────────────────────────────────
+let slides=[];
+let currentIdx=0;
+let presenting=false;
+
+function initSlides(){
+  slides=Array.from(document.querySelectorAll('.hero, .section, .end'));
+}
+
+function startPresentation(){
+  initSlides();
+  if(!slides.length) return;
+  currentIdx=0;
+  presenting=true;
+  document.body.setAttribute('data-presentation','true');
+  showSlide(0);
+  document.documentElement.requestFullscreen().catch(()=>{});
+}
+
+function stopPresentation(){
+  presenting=false;
+  document.body.removeAttribute('data-presentation');
+  slides.forEach(s=>{s.classList.remove('active');s.style.display='';});
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+}
+
+function showSlide(i){
+  slides.forEach((s,j)=>s.classList.toggle('active',j===i));
+  document.querySelector('.slide-counter').textContent=(i+1)+' / '+slides.length;
+}
+
+function nextSlide(){if(currentIdx<slides.length-1){currentIdx++;showSlide(currentIdx);}}
+function prevSlide(){if(currentIdx>0){currentIdx--;showSlide(currentIdx);}}
+
+document.addEventListener('keydown',e=>{
+  if(!presenting) return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();nextSlide();}
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();prevSlide();}
+  if(e.key==='Escape'){e.preventDefault();stopPresentation();}
+  if(e.key==='Home'){e.preventDefault();currentIdx=0;showSlide(0);}
+  if(e.key==='End'){e.preventDefault();currentIdx=slides.length-1;showSlide(currentIdx);}
+});
+
+document.addEventListener('fullscreenchange',()=>{
+  if(!document.fullscreenElement && presenting) stopPresentation();
+});
+</script>
+</body>
+</html>

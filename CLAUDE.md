@@ -24,6 +24,8 @@ Claude decides whether to invoke a skill based solely on `description`. Write it
 - **`.env` never committed.** Secrets go in `.env` (gitignored). Templates go in `.env.example` (committed, with placeholder values). Scripts read config via `_load_env()` — see `ENV.md` for the copy-paste template.
 - **`bundled_addons/` is third-party code.** Never modify files under any skill's `bundled_addons/` directory.
 - **`references/` is supplementary.** Long reference material (templates, examples, language codes) lives here so `SKILL.md` stays under ~500 lines.
+- **Not every skill needs scripts.** Some skills are pure instructions + reference templates (e.g., `html-presentation/` only has `SKILL.md` + `references/template.html`). This is fine — Claude generates output directly from the instructions.
+- **`distribute.bat` auto-discovers skills.** It scans for subdirectories containing `SKILL.md` — no hardcoded list. When creating a new skill, no script changes are needed; it will be picked up automatically.
 
 ## Creating or editing a skill
 

@@ -9,6 +9,7 @@
 | `kb/` | 本地 RAG 知识库 — 语义检索、增量索引、智能删除 |
 | `pdf-to-markdown/` | 文档转 Markdown（PDF/Word/PPT/Excel/图片），基于 MinerU API |
 | `make-tutorial/` | 专业级中文教程生成，输出多文件 HTML 站点 |
+| `html-presentation/` | HTML 演示文稿（替代 PPTX），SVG 图标、暗/亮主题、全屏放映+键盘翻页 |
 | `godot-procedural-kit/` | Godot 4 程序化内容（几何绘制、粒子、音效、地图、特效） |
 | `send-email-skill/` | SMTP 邮件发送，支持 HTML 和附件 |
 
@@ -23,7 +24,7 @@ cp -r <skill-name> ~/.claude/skills/
 cp ~/.claude/skills/<skill-name>/.env.example ~/.claude/skills/<skill-name>/.env
 ```
 
-Windows 用户可双击 `distribute.bat` 一键分发全部技能。
+Windows 用户双击 `distribute.bat` 一键分发全部技能（自动扫描含 `SKILL.md` 的子目录）。
 
 ### 新建技能
 

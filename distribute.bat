@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
 echo ============================================
 echo   MySkill - Skill Distribute
@@ -27,19 +27,19 @@ if not exist "%SKILLS_DIR%" (
 set SCRIPT_DIR=%~dp0
 
 echo.
-echo Skills to sync:
-echo   - send-email-skill
-echo   - kb
-echo   - godot-procedural-kit
-echo   - make-tutorial
-echo   - pdf-to-markdown
+echo Skills found:
+for /d %%d in ("%SCRIPT_DIR%*") do (
+    if exist "%%d\SKILL.md" (
+        echo   - %%~nxd
+    )
+)
 echo.
 
-call :sync send-email-skill
-call :sync kb
-call :sync godot-procedural-kit
-call :sync make-tutorial
-call :sync pdf-to-markdown
+for /d %%d in ("%SCRIPT_DIR%*") do (
+    if exist "%%d\SKILL.md" (
+        call :sync "%%~nxd"
+    )
+)
 
 echo.
 echo ============================================
