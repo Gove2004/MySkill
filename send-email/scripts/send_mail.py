@@ -42,6 +42,7 @@ smtp_server = _env.get("SMTP_SERVER", "smtp.qq.com")
 smtp_port = int(_env.get("SMTP_PORT", "465"))
 sender_email = _env.get("SENDER_EMAIL", "")
 auth_code = _env.get("AUTH_CODE", "")
+default_to = _env.get("DEFAULT_TO", "")  # fallback recipient when --to is omitted
 
 def send_email(to_addrs, subject, body, is_html=False, attachments=None):
     if not sender_email or not auth_code:
@@ -80,13 +81,16 @@ def send_email(to_addrs, subject, body, is_html=False, attachments=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Send an email directly via SMTP")
-    parser.add_argument("--to", required=True, help="Comma-separated list of recipients")
+    parser.add_argument("--to", default=None, help="Comma-separated recipients. Falls back to DEFAULT_TO in .env if omitted.")
     parser.add_argument("--subject", required=True, help="Email subject")
     parser.add_argument("--body", required=True, help="Email body")
     parser.add_argument("--html", action="store_true", help="Send body as HTML")
     parser.add_argument("--attachment", nargs="+", help="Paths to attachments")
-    
+
     args = parser.parse_args()
-    
-    to_list = [email.strip() for email in args.to.split(",") if email.strip()]
+
+    to_value = args.to or default_to
+    if not to_value:
+        parser.error("--to is required (or set DEFAULT_TO in .env)")
+    to_list = [email.strip() for email in to_value.split(",") if email.strip()]
     send_email(to_list, args.subject, args.body, args.html, args.attachment)
