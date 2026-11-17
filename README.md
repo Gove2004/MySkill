@@ -11,7 +11,10 @@
 | `make-tutorial/` | 专业级中文教程生成，输出多文件 HTML 站点 |
 | `html-presentation/` | HTML 演示文稿（替代 PPTX），SVG 图标、暗/亮主题、全屏放映+键盘翻页 |
 | `godot-procedural-kit/` | Godot 4 程序化内容（几何绘制、粒子、音效、地图、特效） |
-| `send-email-skill/` | SMTP 邮件发送，支持 HTML 和附件 |
+| `send-email/` | SMTP 邮件发送，支持 HTML、附件与默认收件人配置 |
+| `agnes-media/` | Agnes AI 图片/视频生成（文生图、图生图、文生视频、关键帧动画） |
+| `qa-now/` | 需求追问 — 动手前澄清模糊需求、隐含假设与技术决策 |
+| `human-do/` | 委派人类执行 — AI 规划时认怂转包，输出可验收任务卡，覆盖物理/权限/担责/审美类 AI 不擅长的环节 |
 
 ## 快速开始
 
@@ -24,7 +27,6 @@ cp -r <skill-name> ~/.claude/skills/
 cp ~/.claude/skills/<skill-name>/.env.example ~/.claude/skills/<skill-name>/.env
 ```
 
-Windows 用户双击 `distribute.bat` 一键分发全部技能（自动扫描含 `SKILL.md` 的子目录）。
 
 ### 新建技能
 
