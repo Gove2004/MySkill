@@ -1,6 +1,6 @@
 ---
 name: kb
-description: RAG knowledge base. Use when user asks to record notes, query knowledge, search saved info, or delete content. Triggers on "记录", "记一下", "查一下", "知识库", "帮我查", "记录下来", "删除笔记", "搜一下".
+description: Local RAG knowledge base (zero dependencies). Use when the user asks to record/save notes, query or look up knowledge, search saved info, or delete content. Triggers on "记录", "记一下", "查一下", "知识库", "帮我查", "记录下来", "删除笔记", "搜一下", "record a note", "look it up", "knowledge base".
 ---
 
 # RAG 知识库

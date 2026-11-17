@@ -1,6 +1,6 @@
 ---
 name: pdf-to-markdown
-description: Convert PDF files to Markdown using MinerU API for easy reading and analysis. Use this skill whenever you need to read a PDF, extract text from a PDF, parse PDF content, analyze a PDF document, or any time a user asks about the contents of a PDF file. Also handles Word, PPT, Excel, images, and HTML files. This skill bundles a ready-to-run Python script and your MinerU token — invoke it rather than trying to read PDFs directly with Read tool or writing ad-hoc parsing code.
+description: Convert PDF (and Word/PPT/Excel/image/HTML) files to clean Markdown via the MinerU API. Use whenever you need to read a PDF, extract text, parse a document, analyze document contents, or the user asks 读PDF, 解析文档, 把PDF转成Markdown, 提取文档内容, 看看这个PDF. Better than raw PDF reading — handles tables, formulas, multi-column layouts, scanned docs. Bundles a ready-to-run script using the configured MinerU token — invoke it instead of reading PDFs directly with the Read tool or writing ad-hoc parsers.
 ---
 
 # PDF to Markdown

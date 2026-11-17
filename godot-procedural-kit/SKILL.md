@@ -1,7 +1,6 @@
 ---
 name: godot-procedural-kit
-description: >
-  Godot 程序化内容工具包，面向希望通过代码生成界面、图形、粒子、音效、地图或通用视觉反馈的项目。适用于减少对贴图、音频素材和预制资源依赖的场景，覆盖 _draw() 几何绘制、程序化粒子、程序化音效、网格地图生成、代码特效，并内置可直接复制的 Godot addons 资源。
+description: Godot 4 procedural content toolkit — generate UI, shapes, particles, sound, maps, and visual effects via code. Use when the user wants procedural generation in Godot, _draw() geometry, 程序化粒子, 程序化音效, 网格地图生成, 代码特效, 减少贴图/音频素材依赖, Godot addons, or 程序化内容. Bundles copy-ready addons (gdfxr, sound_manager, phantom_camera).
 ---
 
 # Godot Procedural Kit

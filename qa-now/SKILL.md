@@ -1,6 +1,6 @@
 ---
 name: qa-now
-description: 当用户的需求描述存在模糊点、未明确的假设、可多种理解的技术决策时，立即发起追问让用户澄清。也支持用户主动调用 —— 用户说"帮我审查一下需求有没有遗漏"、"qa-now"、"追问一下"、"质疑我"、"clarify"、"检查需求完整性"时触发。适用于 AI 辅助开发的场景，确保需求理解对齐，避免生成结果不符合预期。
+description: Clarify ambiguous requirements before implementing. Trigger proactively when the user's request has vague points, unstated assumptions, or multiple valid technical decisions — or when the user says "qa-now", "追问一下", "质疑我", "帮我审查一下需求", "检查需求完整性", "clarify", "clarify requirements", "ask clarifying questions". Ensures requirement alignment in AI-assisted development and avoids mismatched output.
 ---
 
 # QA Now — 即时需求追问
