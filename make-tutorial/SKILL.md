@@ -183,15 +183,19 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 2. 创建 `assets/` 目录和资源文件
 3. 创建 `index.html`（在开头说明主题风格选择理由）
 4. 创建各章节 HTML（参考 `Read references/chapter-example.md`）
+5. 每个页面都要带主题切换按钮和 `<head>` 内联主题脚本（见下节，默认必做）
 
-**如果 references 文件读取失败**：使用简化的内联 CSS（基础排版+代码高亮），优先保证教程可用。
+**如果 references 文件读取失败**：使用简化的内联 CSS（基础排版+代码高亮），但深/浅色切换不能省。
 
 ### Phase 3：完成前验证
-用 `Glob` 列出所有 HTML 文件，随机 `Read` 2-3 个章节检查链接和路径。
+用 `Glob` 列出所有 HTML 文件，随机 `Read` 2-3 个章节检查链接和路径，并确认：
+- 每个页面都有 `data-theme-toggle` 按钮和头部内联主题脚本
+- 组件规则里没有写死的颜色值（`Grep` 搜 `#fff`、`#ffffff`、`background: white` 之类）
 
 交付时说明：
 - 使用了哪个主题风格（tech/math/science...）及原因
 - 完成了哪些章节
+- 主题切换的使用方式：按钮在页面顶部，首次跟随系统，手动选择跨页保持
 - 如何修改：直接 `Edit` 对应的 `.html` 文件
 
 ---
@@ -236,9 +240,9 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 ├── 03-章节标题.html
 ├── ...
 └── assets/
-    ├── style.css       # 主样式文件
-    ├── theme-*.css     # 主题风格文件（按需加载）
-    ├── script.js       # 交互脚本（代码复制、导航等）
+    ├── style.css       # 设计令牌 + 全部组件样式（浅色默认，含深色覆盖）
+    ├── theme-*.css     # 主题风格文件：只覆盖品牌色与字体
+    ├── script.js       # 主题切换、代码复制、标签页
     └── prism/          # 代码高亮库（CSS + JS）
         ├── prism.css
         └── prism.js
@@ -258,30 +262,26 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 
 ## 主题风格系统
 
-根据教程主题领域，自动选择不同的视觉风格（配色、字体、氛围）。
+根据教程主题领域自动选择视觉风格（tech/math/science/art/humanities/business），默认 `theme-tech`；跨领域时优先选实操性更强的主题。
 
-### 主题分类
+完整分类、选择逻辑与样式代码详见 `references/theme-system.md` 与 `references/assets.md`。
 
-- **`theme-tech`** — 技术/编程类：深色代码块，蓝色系，技术感
-- **`theme-math`** — 数学/理论类：纸质感，衬线字体，学术氛围
-- **`theme-science`** — 科学/工程类：冷色调，数据友好，实验室感
-- **`theme-art`** — 设计/艺术类：大胆渐变，高对比，现代感
-- **`theme-humanities`** — 人文/语言类：温暖色调，舒适阅读
-- **`theme-business`** — 商业/职场类：专业深蓝，干净利落
+---
 
-### 选择逻辑
+## 深色/浅色主题切换（默认必做）
 
-根据教程主题自动判断最合适的风格：
-- **纯技术类**（编程、框架、工具）→ `theme-tech`
-- **理论/数学类**（算法理论、数学、统计）→ `theme-math`
-- **应用科学类**（数据分析、物理、工程）→ `theme-science`
-- **设计/视觉类**（UI、图形、动画）→ `theme-art`
-- **人文/语言类**（语言学习、写作）→ `theme-humanities`
-- **商业/管理类**（营销、管理、职场）→ `theme-business`
+**每套教程都必须自带深色/浅色切换，不需要用户额外提要求。** 这是默认交付标准，不是可选增强。
 
-**跨领域判断：** 如果主题跨领域（如"Python 数据分析"），优先选择实操性更强的主题（此例选 `theme-tech`，因为重点是编程实现而非数据科学理论）。默认使用 `theme-tech`。
+硬性要求：
 
-完整主题样式代码参考 `references/assets.md`。
+1. **每页都有切换按钮。** `index.html` 和所有章节页都要有 `data-theme-toggle` 的按钮；`script.js` 里已内置"缺失时自动补一个"的兜底，但不要依赖兜底，模板里该写的就写上。
+2. **首屏不能闪。** `<head>` 里必须放内联脚本，在绘制前把 `data-theme` 写到 `<html>` 上。放到 `</head>` 之前，不能放 `</body>` 前——那样深色用户会看到一帧白底。
+3. **首次跟随系统，之后记住选择。** 无记录时读 `prefers-color-scheme`；手动切换后写入 `localStorage`，键名 `tutorial-theme`，值只有 `light` / `dark`。所有页面共用同一个键，翻页不跳。
+4. **颜色全部走令牌。** 组件规则里禁止字面色值（`#fff`、`#333`、`#ddd`、`background: white`），否则切一半就停，出现白底白字或深底深字。新增组件时先在 `style.css` 的 `:root` 和 `[data-theme="dark"]` 里各补一条令牌。
+5. **代码块两套主题都保持深色。** Prism 固定 `prism-tomorrow`，背景由 `--bg-code` 控制，不要为深色模式换浅色 Prism 主题。
+6. **交付前实测两种模式。** 正文、`h2` 下边框、表格表头、四类提示框、章节徽章、行内代码、代码块、导航链接、切换按钮本身，逐项确认没有低对比区域。
+
+令牌清单、完整 `style.css`、`script.js` 和头部内联脚本的写法见 `references/assets.md`；六个主题各自的深浅两套品牌色见 `references/theme-system.md`。
 
 ---
 
@@ -295,16 +295,29 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>章节标题 - 教程名称</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/theme-tech.css">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('tutorial-theme');
+                var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 <body>
     <nav class="chapter-nav">
         <a href="index.html">目录</a>
         <a href="上一章.html">← 上一章</a>
         <a href="下一章.html">下一章 →</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">深色</button>
     </nav>
 
     <main>
@@ -326,6 +339,17 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 </html>
 ```
 
+`index.html` 没有 `nav.chapter-nav`，把切换按钮放在 `main` 之前的 `.page-toolbar` 里：
+
+```html
+<body>
+    <div class="page-toolbar">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">深色</button>
+    </div>
+    <main>
+        <h1>教程标题</h1>
+```
+
 **完整示例**：参考 `references/chapter-example.md` 查看一个专业级章节的完整实现（Python 异常处理）。
 
 **资源文件**：参考 `references/assets.md` 获取完整的 CSS、JS 和主题样式代码。
@@ -334,42 +358,7 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 
 ## HTML 组件使用指南
 
-充分利用 HTML 的表现力增强教学效果。完整组件库和示例参考 `references/assets.md`。
-
-**核心组件：**
-- **提示框**：`<div class="callout callout-info/warning/tip/danger">`
-- **代码块**：`<pre><code class="language-python">` + Prism.js 自动高亮
-- **可折叠内容**：`<details><summary>` 用于进阶内容
-- **标签页**：`<div class="tabs">` 展示多语言对比
-- **对比表格**：`<table class="comparison">` 好/坏写法对照
-- **步骤流程**：`<div class="steps">` 操作指南
-- **定义框**：`<div class="definition">` 关键概念
-- **侧边注释**：`<aside class="sidebar-note">` 补充说明
-
-**无障碍要求：**
-- 为交互组件添加 ARIA 属性（`role`, `aria-selected`, `aria-label`）
-- 使用语义化标签（`<nav>`, `<main>`, `<article>`）
-- 确保键盘导航可访问所有交互元素
-- 文本与背景对比度 ≥ 4.5:1
-5. **替代文本**：图片、图表必须有 `alt` 描述
-
-**示例改进：**
-```html
-<!-- 标签页组件添加 ARIA -->
-<div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" aria-controls="panel-1">Python</button>
-    <button role="tab" aria-selected="false" aria-controls="panel-2">JavaScript</button>
-</div>
-<div id="panel-1" role="tabpanel" class="tab-content active">...</div>
-<div id="panel-2" role="tabpanel" class="tab-content">...</div>
-
-<!-- 代码块复制按钮添加 aria-label -->
-<button class="copy-button" aria-label="复制代码到剪贴板">复制</button>
-```
-
-### 响应式设计已包含
-
-`style.css` 已包含基本响应式设计（`@media (max-width: 768px)`），移动端会自动调整布局、字体大小和导航结构。
+充分利用 HTML 表现力增强教学效果：提示框、代码块、可折叠、标签页、对比表格、步骤流程、定义框、侧边注释等。完整组件清单、ARIA 无障碍要求与响应式说明详见 `references/components-guide.md`（样式代码见 `references/assets.md`）。
 
 ---
 
@@ -416,6 +405,8 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 - **足够具体和可学习**，有真实代码、真实场景、真实问题
 - **全部使用中文讲解**
 - **视觉风格与主题匹配**
+- **默认支持深色/浅色切换**：每页都有按钮，首次跟随系统，选择跨页保持，首屏无闪烁
+- **颜色全部走 CSS 令牌**，两套主题下正文、表格、提示框、代码块对比度都达标
 - **充分利用 HTML 的表现力**（不是 markdown 换了个后缀）
 - **双击 index.html 即可开始学习**，无需任何工具链
 - **明显不是模板批量导出的产物**
@@ -434,61 +425,7 @@ HTML 教程可以直接在浏览器中打开，无需任何工具链，同时拥
 
 ## 教程维护与版本管理
 
-### 版本标注
-
-在 `index.html` 中添加版本和更新信息：
-
-```html
-<div class="version-info">
-    <p><strong>版本：</strong>v1.2 | <strong>更新日期：</strong>2026-06-12</p>
-    <p><strong>适用版本：</strong>Python 3.10+</p>
-</div>
-```
-
-对应 CSS：
-```css
-.version-info {
-    background: #f0f0f0;
-    padding: 1em;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 2em;
-}
-```
-
-### 更新策略
-
-**小更新**（修正错误、补充说明）：
-- 直接修改对应章节
-- 更新 `index.html` 的更新日期
-- 在章节顶部添加更新说明（可选）
-
-**大更新**（新增章节、重构内容）：
-- 升级版本号（v1.2 → v1.3）
-- 在 `index.html` 添加更新日志链接
-- 考虑创建 `CHANGELOG.md` 记录变更
-
-### 系列教程组织
-
-如果要创建多个相关教程（如"Python 基础" + "Python 进阶"），建议目录结构：
-
-```
-tutorials/
-├── index.html                    # 总索引页
-├── python-basics/                # 基础教程
-│   ├── index.html
-│   ├── 01-xxx.html
-│   └── assets/
-├── python-advanced/              # 进阶教程
-│   ├── index.html
-│   ├── 01-xxx.html
-│   └── assets/
-└── shared-assets/                # 共享资源（可选）
-    └── common.css
-```
-
-总索引页 `tutorials/index.html` 列出所有系列教程，说明学习顺序和依赖关系。
+版本标注、小/大更新策略、系列教程目录组织详见 `references/maintenance.md`。
 
 ---
 

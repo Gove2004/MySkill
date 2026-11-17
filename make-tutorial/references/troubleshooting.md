@@ -32,6 +32,28 @@
 - 确认 `style.css` 包含 `@media` 查询
 - 测试时使用浏览器开发者工具的移动设备模拟
 
+## 切换主题后部分区域没变色
+
+**原因**：该组件的颜色写死了字面值，没用 CSS 令牌。
+
+**检查**：
+- 用 `Grep` 搜 `#fff`、`#ffffff`、`#333`、`#ddd`、`background: white`、`color: black`
+- 常见漏网区域：表头 `th`、`pre` 背景、`.callout-*` 背景、`.chapter-badge`、`.tab-buttons button`、行内 `code`
+
+**解决**：在 `:root` 和 `[data-theme="dark"]` 里各加一条令牌，组件规则改成 `var(--xxx)`。深色块必须配全，漏一条就会在深色下露馅。
+
+## 首屏先白一下再变深色
+
+**原因**：`data-theme` 是在 `DOMContentLoaded` 之后才写入的，或内联脚本放到了 `</body>` 前。
+
+**解决**：把内联主题脚本移到 `</head>` 之前，任何 CSS 或 `script.js` 都不要负责首次主题判定，它们只负责后续切换。
+
+## 翻页后主题跳回浅色
+
+**原因**：写入的 key 不一致，或某些页面没引 `script.js`。
+
+**检查**：`localStorage` 的键名固定为 `tutorial-theme`，值只有 `light` / `dark`；`index.html` 和每个章节页都要引 `assets/script.js`。
+
 ## 练习题/思考题不够专业
 
 **原因**：题目过于简单或脱离实际

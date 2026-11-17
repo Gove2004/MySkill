@@ -1,6 +1,6 @@
 ## 完整章节示例
 
-以下是一个专业级章节的完整示例（Python 错误处理教程）：
+以下是一个专业级章节的完整示例（Python 错误处理教程）。`<head>` 里的内联主题脚本和 `nav` 里的 `data-theme-toggle` 按钮是必留部分，不要删减。
 
 ```html
 <!DOCTYPE html>
@@ -8,16 +8,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>异常处理最佳实践 - Python 进阶教程</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/theme-tech.css">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('tutorial-theme');
+                var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 <body>
     <nav class="chapter-nav">
         <a href="index.html">目录</a>
         <a href="03-context-managers.html">← 上一章</a>
         <a href="05-concurrency.html">下一章 →</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">深色</button>
     </nav>
 
     <main>
